@@ -3,6 +3,7 @@ from data import db_session
 import datetime
 from flask_login import LoginManager, login_required
 from register import login1, logout1, register1
+from data.users import User
 
 
 app = Flask(__name__)
@@ -14,7 +15,7 @@ login_manager.init_app(app)
 
 @app.route('/')
 def index():
-    return render_template('base.html', title='k')
+    return render_template('index.html', title='k')
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -37,10 +38,10 @@ def session_test():
     session['visit_count'] = visits_count + 1
     return make_response(f'hvdhvjdhjxvhjb {visits_count + 1} jhvbf')
 
-# @login_manager.user_loader
-# def load_user(user_id):
-#     db_sess = db_session.create_session()
-#     return db_sess.query(User).get(user_id)
+@login_manager.user_loader
+def load_user(user_id):
+    db_sess = db_session.create_session()
+    return db_sess.query(User).get(user_id)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
