@@ -5,19 +5,28 @@ import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 
+
 class User(SqlAlchemyBase, UserMixin):
     __tablename__ = 'users'
     id = sa.Column(sa.Integer, primary_key=True, autoincrement=True)
     name = sa.Column(sa.String, nullable=True)
-    about = sa.Column(sa.String)
     hashed_password = sa.Column(sa.String, nullable=True)
     email = sa.Column(sa.String, nullable=True, unique=True, index=True)
+    # here starts personal info
+    pic = sa.Column(sa.String)  # путь до картинки, которую загрузил пользователь
+    age = sa.Column(sa.Integer, default=0)
+    sex = sa.Column(sa.String, default='Не выбран')
+    profession = sa.Column(sa.String(255), default='Не выбраны')
+    about = sa.Column(sa.String)
+    work_document = sa.Column(sa.String)  # путь до файла с чертовым резюме, которое загрузит после пользователь
+    work_exp = sa.Column(sa.String)  # мы будем хранить это просто в виде строки. Будет сплит - решим после
+    connect_info = sa.Column(sa.String)  # удивительно, но тоже просто строка для всех контактов
     created_date = sa.Column(sa.DateTime, default=datetime.datetime.now)
 
+    # TODO: дописать сюда связь с Project
 
     def __repr__(self) -> str:
         return f'<{self.id}> {self.name} {self.email}'
-    
 
     def set_password(self, password):
         self.hashed_password = generate_password_hash(password)

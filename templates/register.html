@@ -1,55 +1,66 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Регистрация</h1>
-<form action="" method="post">
-    {{ form.hidden_tag() }}
-    <p>
-        {{ form.email.label }}<br>
-        {{ form.email(class="form-control", type="email") }}<br>
-        {% for error in form.email.errors %}
-            <p class="alert alert-danger" role="alert">
-                {{ error }}
-            </p>
-        {% endfor %}
-    </p>
-    <p>
-        {{ form.password.label }}<br>
-        {{ form.password(class="form-control", type="password") }}<br>
-        {% for error in form.password.errors %}
-            <p class="alert alert-danger" role="alert">
-                {{ error }}
-            </p>
-        {% endfor %}
-    </p>
-    <p>
-        {{ form.password_again.label }}<br>
-        {{ form.password_again(class="form-control", type="password") }}<br>
-        {% for error in form.password_again.errors %}
-            <p class="alert alert-danger" role="alert">
-                {{ error }}
-            </p>
-        {% endfor %}
-    </p>
-    <p>
-        {{ form.name.label }}<br>
-        {{ form.name(class="form-control") }}<br>
-        {% for error in form.name.errors %}
-            <p class="alert alert-danger" role="alert">
-                {{ error }}
-            </p>
-        {% endfor %}
-    </p>
-    <p>
-        {{ form.about.label }}<br>
-        {{ form.about(class="form-control") }}<br>
-        {% for error in form.about.errors %}
-            <p class="alert alert-danger" role="alert">
-                {{ error }}
-            </p>
-        {% endfor %}
-    </p>
-    <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
-    {{message}}
-</form>
+    <h1>Для начала надо стать новым пользователем, знаешь, да?</h1>
+        <div class="container mt-5">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="border p-4 rounded">
+                        <form action="" method="post">
+                            {{ form.hidden_tag() }}
+                            <div class="form-group">
+                                {{ form.email.label(class="font-weight-bold small") }}
+                                {{ form.email(class="form-control", placeholder="Enter your email", type="email") }}
+                                {% for error in form.email.errors %}
+                                    <div class="alert alert-danger mt-2" role="alert">
+                                        {{ error }}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <div class="form-group">
+                                {{ form.password.label(class="font-weight-bold small") }}
+                                {{ form.password(class="form-control", placeholder="Enter your password", type="password") }}
+                                {% for error in form.password.errors %}
+                                    <div class="alert alert-danger mt-2" role="alert">
+                                        {{ error }}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <div class="form-group">
+                                {{ form.password_again.label(class="font-weight-bold small") }}
+                                {{ form.password_again(class="form-control", placeholder="Enter your password again", type="password") }}
+                                {% for error in form.password_again.errors %}
+                                    <div class="alert alert-danger mt-2" role="alert">
+                                        {{ error }}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <div class="form-group">
+                                {{ form.name.label(class="font-weight-bold small") }}
+                                {{ form.name(class="form-control", placeholder="Enter your name") }}
+                                {% for error in form.name.errors %}
+                                    <div class="alert alert-danger mt-2" role="alert">
+                                        {{ error }}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <div class="form-group">
+                                {{ form.about.label(class="font-weight-bold small") }}
+                                {{ form.about(class="form-control", placeholder="Tell us about yourself") }}
+                                {% for error in form.about.errors %}
+                                    <div class="alert alert-danger mt-2" role="alert">
+                                        {{ error }}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <div class="form-group">
+                                {{ form.submit(class="btn btn-primary") }}
+                            </div>
+                            <div class="mt-2">{{ message }}</div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 {% endblock %}

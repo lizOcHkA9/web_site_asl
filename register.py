@@ -4,16 +4,22 @@ from data.users import User
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from forms.loginform import LoginForm
 from forms.user import RegisterForm
+from loguru import logger
 
 
 def login1():
     form = LoginForm()
     if form.validate_on_submit():
+        logger.debug(f'Logging in...')
         db_sess = db_session.create_session()
         user = db_sess.query(User).filter(User.email == form.email.data).first()
         if user and user.check_password(form.password.data):
-            login_user(user, remember=form.remember_me.data)
-            return redirect("/")
+            logger.debug(f'Passwd matched')
+            try:
+                login_user(user, remember=form.remember_me.data)
+                return redirect("/")
+            except Exception as e:
+                logger.error(f'Error by logging in\n{e}')
         return render_template('login.html',
                                message="Неправильный логин или пароль",
                                form=form)
@@ -29,7 +35,8 @@ def register1():
     form = RegisterForm()
     if form.validate_on_submit():
         if form.password.data != form.password_again.data:
-            return render_template('register.html', title='регистрация', form=form, message='Пароли не совпадают')
+            return render_template('register.html',
+                                   title='регистрация', form=form, message='Пароли не совпадают')
         db_sess = db_session.create_session()
         if db_sess.query(User).filter(User.email == form.email.data).first():
             return render_template('register.html', title='регистрация', form=form,

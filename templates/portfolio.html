@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .archaic-card {
+            background-color: #fff;
+            border: 2px solid #d3d3d3;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .profile-header {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .profile-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 2px solid #d3d3d3;
+            margin-bottom: 1rem;
+        }
+
+        .edit-button {
+            margin-top: .5rem;
+        }
+    </style>
+
+    <div class="container pt-4">
+
+        <div class="profile-header">
+            <img src="https://via.placeholder.com/150" alt="Фото пользователя" class="profile-image">
+            <h1>{{ user.name }}</h1>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3">
+                <div class="archaic-card">
+                    <h5>Информация</h5>
+                    <p>Возраст: {{ user.age }}<br>Пол: {{ user.sex }}</p>
+                    <a href="/edit_age_sex/{{ user.id }}"><button type="button" class="btn btn-primary edit-button">
+                        Редактировать
+                    </button></a>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="archaic-card">
+                    <h5>Обо мне</h5>
+                    <p>Здесь напишите всё, что считаете нужным о себе...</p>
+                    <span>Резюме.pdf</span><br>
+                    <button type="button" class="btn btn-primary edit-button">Редактировать</button>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="archaic-card">
+                    <h5>Профессиональный профиль</h5>
+                    <p>Список ваших профессиональных навыков...</p>
+                    <button type="button" class="btn btn-primary edit-button">Редактировать</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="archaic-card">
+                    <h5>Опыт работы</h5>
+                    <p>Здесь содержится информация о ваших предыдущих местах работы.</p>
+                    <button type="button" class="btn btn-primary edit-button">Редактировать</button>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="archaic-card">
+                    <h5>Проекты</h5>
+                    <div class="text-center">
+                        <a href="#">
+                            <img src="https://via.placeholder.com/200x150" alt="Проект 1" class="img-fluid">
+                            <p>Проект 1</p>
+                        </a>
+                    </div>
+                    <button type="button" class="btn btn-primary edit-button">Редактировать</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="archaic-card">
+            <h5>Контактная информация</h5>
+            <ul class="list-unstyled">
+                <li><a href="#">Ссылка 1</a></li>
+                <li><a href="#">Ссылка 2</a></li>
+                <li><a href="#">Ссылка 3</a></li>
+            </ul>
+            <button type="button" class="btn btn-primary edit-button">Редактировать</button>
+        </div>
+
+    </div>
+
+{% endblock %}

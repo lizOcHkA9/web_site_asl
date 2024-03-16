@@ -1,5 +1,35 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>лента</h1>
+    <h1>Тут лента людей!</h1>
+    <h4><i>Как бы это странно не звучало...</i></h4>
+
+    {% if users %}
+        {% for user in users %}
+
+            <div class="container mt-5">
+                <div class="card">
+                    <div class="card-header">
+                        Очередной работяга (работяжка, я просто не знаю)
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ user.name }}</h5>
+                        <h3 class="card-text">
+                            {% if user.profession %}{{ user.profession }}{% else %}не написали...{% endif %}
+                        </h3>
+                        <p class="card-text">{{ user.about }}</p>
+                        <a href="/users/{{ user.id }}" class="btn btn-primary">Посмотреть</a>
+                    </div>
+                    <div class="card-footer text-muted">
+                        {{ user.created_date }}
+                    </div>
+                </div>
+            </div>
+
+        {% endfor %}
+    {% else %}
+        <br><br><br>
+        <p><i><b>Забавно... никого еще нет...</b></i></p>
+    {% endif %}
+
 {% endblock %}

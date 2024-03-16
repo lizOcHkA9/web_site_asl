@@ -7,15 +7,16 @@ SqlAlchemyBase = dec.declarative_base()
 
 __factory = None
 
+
 def global_init(db_file):
     global __factory
 
     if __factory:
         return
-    
+
     if not db_file or not db_file.strip():
         raise Exception('Нет файла.')
-    
+
     conn_str = f'sqlite:///{db_file.strip()}?check_same_thread=False'
     engine = sa.create_engine(conn_str, echo=False)
 
