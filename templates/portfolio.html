@@ -45,24 +45,48 @@
                 <div class="archaic-card">
                     <h5>Информация</h5>
                     <p>Возраст: {{ user.age }}<br>Пол: {{ user.sex }}</p>
-                    <a href="/edit_age_sex/{{ user.id }}"><button type="button" class="btn btn-primary edit-button">
-                        Редактировать
-                    </button></a>
+                    <a href="/edit_age_sex/{{ user.id }}">
+                        <button type="button" class="btn btn-primary edit-button">
+                            Редактировать
+                        </button>
+                    </a>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="archaic-card">
                     <h5>Обо мне</h5>
-                    <p>Здесь напишите всё, что считаете нужным о себе...</p>
-                    <span>Резюме.pdf</span><br>
-                    <button type="button" class="btn btn-primary edit-button">Редактировать</button>
+                    {% if user.about %}
+                        <p>{{ about|safe }}</p>
+                    {% else %}
+                        <p><i>Пока тут ничего нет...</i></p>
+                    {% endif %}
+
+                    {% if user.work_document %}
+                        <a href="{{ url_for('download_file', filename=user.work_document) }}"
+                           download><span>{{ user.work_document }}</span></a><br>
+                    {% else %}
+                        <span><i>Увы... но резюме не загружено</i></span>
+                    {% endif %}
+                    <a href="/edit_about_resume/{{ user.id }}">
+                        <button type="button" class="btn btn-primary edit-button">Редактировать</button>
+                    </a>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="archaic-card">
-                    <h5>Профессиональный профиль</h5>
-                    <p>Список ваших профессиональных навыков...</p>
-                    <button type="button" class="btn btn-primary edit-button">Редактировать</button>
+                    <h5>Какие профессии у меня</h5>
+                    {% if user.profession %}
+                        <ul>
+                            {% for prof in user.profession.split(';') %}
+                                <li><strong>{{ prof }}</strong></li><br>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p><i>Видимо пока нет никаких профессий...</i></p>
+                    {% endif %}
+                    <a href="/add_profession/{{ user.id }}">
+                        <button type="button" class="btn btn-primary edit-button">Редактировать</button>
+                    </a>
                 </div>
             </div>
         </div>
@@ -71,8 +95,17 @@
             <div class="col-md-6">
                 <div class="archaic-card">
                     <h5>Опыт работы</h5>
-                    <p>Здесь содержится информация о ваших предыдущих местах работы.</p>
-                    <button type="button" class="btn btn-primary edit-button">Редактировать</button>
+                    <ul>
+                        {% for el in exp_arr %}
+                            <li>
+                                <i>{{ el['company'] }}</i><br><strong>{{ el['position'] }}</strong><br>
+                                <p>Начиная с: {{ el['start_date'] }}; по: {{ el['end_date'] }}</p>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    <a href="/add_experience/{{ user.id }}">
+                        <button type="button" class="btn btn-primary edit-button">Редактировать</button>
+                    </a>
                 </div>
             </div>
             <div class="col-md-6">
@@ -91,12 +124,16 @@
 
         <div class="archaic-card">
             <h5>Контактная информация</h5>
-            <ul class="list-unstyled">
-                <li><a href="#">Ссылка 1</a></li>
-                <li><a href="#">Ссылка 2</a></li>
-                <li><a href="#">Ссылка 3</a></li>
-            </ul>
-            <button type="button" class="btn btn-primary edit-button">Редактировать</button>
+            {% if user.connect_info %}
+                <ul class="list-unstyled">
+                    {% for el in user.connect_info.split(';') %}
+                        <li><a href="{{ el }}">{{ el }}</a></li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <i>Никак не связаться пока...</i><br>
+            {% endif %}
+            <a href="/add_contact_links/{{ user.id }}"><button type="button" class="btn btn-primary edit-button">Редактировать</button></a>
         </div>
 
     </div>

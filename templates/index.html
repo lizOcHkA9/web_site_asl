@@ -15,9 +15,9 @@
                     <div class="card-body">
                         <h5 class="card-title">{{ user.name }}</h5>
                         <h3 class="card-text">
-                            {% if user.profession %}{{ user.profession }}{% else %}не написали...{% endif %}
+                            {% if user.profession %}{{ '<br>'.join(user.profession.split(';'))|safe }}{% else %}не написали...{% endif %}
                         </h3>
-                        <p class="card-text">{{ user.about }}</p>
+                        <p class="card-text">{{ user.about|safe }}</p>
                         <a href="/users/{{ user.id }}" class="btn btn-primary">Посмотреть</a>
                     </div>
                     <div class="card-footer text-muted">

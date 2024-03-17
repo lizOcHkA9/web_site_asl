@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="text-center">Контактные ссылки</h2>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="">
+                            {{ form.hidden_tag() }}
+                            {{ form.link_1.label }} {{ form.link_1(size=40, class="form-control my-2") }}
+                            {{ form.link_2.label }} {{ form.link_2(size=40, class="form-control my-2") }}
+                            {{ form.link_3.label }} {{ form.link_3(size=40, class="form-control my-2") }}
+                            {{ form.link_4.label }} {{ form.link_4(size=40, class="form-control my-2") }}
+                            {{ form.link_5.label }} {{ form.link_5(size=40, class="form-control my-2") }}
+                            <div class="text-center">
+                                {{ form.submit(class="btn btn-primary") }}
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

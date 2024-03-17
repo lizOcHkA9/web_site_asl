@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block content %}
+    <script>
+        let experienceCount = {{ form.experiences|length }};
+        const maxExperiences = 10;  // Максимальное количество опыта работы, которое можно добавить
+
+        // Функция для добавления нового опыта работы
+        function addExperience() {
+            if (experienceCount < maxExperiences) {
+                const experienceContainer = document.getElementById('experience-fields');
+                const newExperience = document.createElement('div');
+                newExperience.classList.add('form-group');
+                newExperience.setAttribute('id', 'experience-' + experienceCount);
+                newExperience.innerHTML = `
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="form-row">
+                        <div class="col">
+                            <input type="text" class="form-control" name="experiences-${experienceCount}-company" placeholder="Компания" required>
+                        </div>
+                        <div class="col">
+                            <input type="text" class="form-control" name="experiences-${experienceCount}-position" placeholder="Должность" required>
+                        </div>
+                    </div>
+                    <div class="form-row mt-2">
+                        <div class="col">
+                            <input type="date" class="form-control" name="experiences-${experienceCount}-start_date" placeholder="Дата начала" required>
+                        </div>
+                        <div class="col">
+                            <input type="date" class="form-control" name="experiences-${experienceCount}-end_date" placeholder="Дата окончания" required>
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-2">
+                        <button type="button" class="btn btn-danger" onclick="removeExperience(${experienceCount})">Удалить</button>
+                    </div>
+                </div>
+            </div>
+        `;
+                experienceContainer.appendChild(newExperience);
+                experienceCount++;
+            }
+        }
+
+        // Функция для удаления определенного опыта работы
+        function removeExperience(index) {
+            const experienceToRemove = document.getElementById('experience-' + index);
+            if (experienceToRemove) {
+                experienceToRemove.remove();
+            }
+        }
+
+    </script>
+
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <!-- Централизованная колонка для формы -->
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="text-center">Добавьте ваш опыт работы</h2>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="">
+                            {{ form.hidden_tag() }}
+                            <div id="experience-fields">
+
+                            </div>
+                            <div class="text-center">
+                                <button type="button" class="btn btn-success" onclick="addExperience()">Добавить опыт
+                                </button>
+                                {{ form.submit(class="btn btn-primary") }}
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

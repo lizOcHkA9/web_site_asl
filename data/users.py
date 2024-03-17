@@ -16,10 +16,10 @@ class User(SqlAlchemyBase, UserMixin):
     pic = sa.Column(sa.String)  # путь до картинки, которую загрузил пользователь
     age = sa.Column(sa.Integer, default=0)
     sex = sa.Column(sa.String, default='Не выбран')
-    profession = sa.Column(sa.String(255), default='Не выбраны')
+    profession = sa.Column(sa.String)
     about = sa.Column(sa.String)
     work_document = sa.Column(sa.String)  # путь до файла с чертовым резюме, которое загрузит после пользователь
-    work_exp = sa.Column(sa.String)  # мы будем хранить это просто в виде строки. Будет сплит - решим после
+    work_exp = sa.Column(sa.String)  # Мы будем хранить это просто в виде строки. Будет сплит - решим после
     connect_info = sa.Column(sa.String)  # удивительно, но тоже просто строка для всех контактов
     created_date = sa.Column(sa.DateTime, default=datetime.datetime.now)
 

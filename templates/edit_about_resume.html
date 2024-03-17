@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+    <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+
+    <div class="container mt-5">
+        <div class="row">
+            <!-- Поле подсказок -->
+            <div class="col-md-4">
+                <ul class="list-unstyled">
+                    <li><i class="text-danger" style="font-style: italic;">Надо что-то написать полезное для вас...</i>
+                    </li>
+                    <br>
+                    <li><i class="text-danger" style="font-style: italic;">Имя вашего файла будет изменеоно! Сначала
+                        будет ваш id, после дата, а после только название файла</i></li>
+                    <br>
+                    <li><i class="text-danger" style="font-style: italic;">И название надо делать исключительно при
+                        помощи АНГЛИЙСКИХ буков. Ну, конечно, если вы не хотите сломать имя вашего резюме</i></li>
+                    <br>
+                </ul>
+            </div>
+
+            <!-- Форма -->
+            <!-- Форма -->
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        Редактирование профиля
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="" enctype="multipart/form-data">
+                            {{ form.hidden_tag() }}
+                            <div class="form-group">
+                                {{ form.about.label(class_='form-control-label') }}
+                                {{ form.about(rows=4, class_='form-control', id='markdownEditor') }}
+                            </div>
+                            <div class="form-group">
+                                {{ form.resume.label(class_='form-control-label') }}
+                                {{ form.resume(class_='form-control-file') }}
+                            </div>
+                            {{ form.submit(class_='btn btn-primary') }}
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var editor = new SimpleMDE({
+            element: document.getElementById("markdownEditor"),
+            spellChecker: false
+        });
+
+    </script>
+{% endblock %}
