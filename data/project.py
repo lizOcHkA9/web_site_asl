@@ -7,6 +7,7 @@ from flask_login import UserMixin
 
 
 class Project(SqlAlchemyBase):
+    __tablename__ = 'projects'
     id = sa.Column(sa.Integer, primary_key=True)
     name = sa.Column(sa.String(100), nullable=False)
     desc = sa.Column(sa.Text)
@@ -20,4 +21,4 @@ class Project(SqlAlchemyBase):
     main_pic = sa.Column(sa.String)  # путь к картинке, что будет лицом проекта
 
     # TODO: добавить реализацию связи с пользователем
-    # user_id = sa.Column(sa.Integer, sa.ForeignKey('user.id'), nullable=False)
+    author = orm.relationship("User")
