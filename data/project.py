@@ -21,4 +21,4 @@ class Project(SqlAlchemyBase):
     main_pic = sa.Column(sa.String)  # путь к картинке, что будет лицом проекта
 
     # TODO: добавить реализацию связи с пользователем
-    author = orm.relationship("User")
+    author = sa.Column(sa.Integer)

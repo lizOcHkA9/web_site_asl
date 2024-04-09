@@ -1,0 +1,23 @@
+{%extends 'base.html'%} {%block content%}
+
+<div class="container">
+  <h2>Добавьте свой прооект!</h2>
+  <form method="post" enctype="multipart/form-data">
+    {{ form.hidden_tag() }}
+    {{ form.name.label }} 
+    {{ form.name(class_='form-control') }}
+    {{ form.desc.label }}
+    {{ form.desc(class_='form-control') }}
+    {{ form.tasks.label }}
+    {{ form.tasks(class_='form-control') }}
+    {{ form.project_features.label }}
+    {{ form.project_features(class_='form-control') }}
+    {{ form.pics.label }}
+    {{ form.pics(class_='form-control') }}
+    {{ form.main_pic.label }}
+    {{ form.main_pic(class_='form-control') }}
+    {{ form.submit(class_='btn btn-primary') }}
+  </form>
+</div>
+
+{%endblock%}

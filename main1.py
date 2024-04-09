@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, request, make_response, session, redirect, send_from_directory, flash, jsonify
+from flask import Flask, render_template, request, make_response, session, redirect, send_from_directory, flash, jsonify, current_app
 from werkzeug.utils import secure_filename
 from data import db_session
 import datetime
@@ -11,6 +11,8 @@ from forms.profession import ProfessionForm
 from forms.experience import ExperienceForm
 from forms.contact import ContactLinksForm
 from data.users import User
+from data.project import Project
+from forms.project_form import ProjectForm
 from loguru import logger
 import markdown
 import json
@@ -122,12 +124,104 @@ def portfolio():
     except Exception as e:
         exp_arr = []
         logger.warning(f'Cannot find any info about work_exp')
+    
+    db = db_session.create_session()
+    project_cnt = len(db.query(Project).filter_by(author=current_user.id).all())
+    logger.debug(f'Project cnt -> {project_cnt}')
     params = {
         'user': current_user,
         'about': markdown.markdown(current_user.about),
         'exp_arr': exp_arr,
+        'project_count': project_cnt
     }
     return render_template('portfolio.html', **params)
+
+
+@app.route('/my_projects')
+@login_required
+def my_projects():
+    db = db_session.create_session()
+    projs = db.query(Project).filter_by(author=current_user.id).all()
+    logger.debug(f'All the projs of the user -> {projs}')
+    
+    data = []
+    if projs:
+        for el in projs:
+            if el == '':
+                continue
+            proj = db.query(Project).get(int(el.id))
+            data.append(proj)
+    
+    # pictures = [for el in data]
+    
+    params = {
+        'projects': data,
+        'user': current_user,
+        'upload_dir': app.config['UPLOAD_FOLDER']
+    }
+    logger.debug(f'Path to uploaded files -> {params["upload_dir"]}')
+    return render_template('my_projects.html', **params)
+
+
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
+
+@app.route('/add_proj/<int:user_id>', methods=['GET', 'POST'])
+@login_required
+def add_project(user_id: int):
+    if current_user.id != user_id:
+        return 'Access denied'
+    
+    form = ProjectForm()
+    if form.validate_on_submit():
+        
+        def save_pictures(form_pics_field, form_main_pic_field):
+            file_path_list = []
+            
+            # Обрабатываем поле 'pics' с множественным выбором файлов
+            if form_pics_field.data:
+                for file in form_pics_field.data:
+                    # Генерируем уникальное имя для файла
+                    unique_filename = datetime.datetime.utcnow().strftime('%Y%m%d%H%M%S%f') + '_' + secure_filename(file.filename)
+                    # Сохраняем файл в папке для загрузки
+                    file_path = os.path.join(current_app.config['UPLOAD_FOLDER'], unique_filename)
+                    file.save(file_path)
+                    # Добавляем имя файла в список
+                    file_path_list.append(unique_filename)
+
+            # Обрабатываем поле 'main_pic' для одного файла
+            if form_main_pic_field.data:
+                unique_filename = datetime.datetime.utcnow().strftime('%Y%m%d%H%M%S%f') + '_' + secure_filename(form_main_pic_field.data.filename)
+                file_path = os.path.join(current_app.config['UPLOAD_FOLDER'], unique_filename)
+                form_main_pic_field.data.save(file_path)
+                file_path_list.append(unique_filename)
+
+            return file_path_list
+        
+        # gather all the pics -> last pic is always main!
+        pic_list = save_pictures(form.pics, form.main_pic)
+        logger.debug(f'Here the pic_list -> {pic_list}')
+        
+        new_project = Project(
+            name=form.name.data,
+            desc=form.desc.data,
+            tasks=form.tasks.data,
+            project_features=form.project_features.data if form.project_features.data else None,
+            pics=';'.join(pic_list[:-1]),
+            main_pic=pic_list[-1],
+            author=user_id
+        )
+        # круто делаем все в БД
+        db = db_session.create_session()
+        db.add(new_project)
+        db.commit()
+        logger.debug(f'Here is the new_proj id -> {new_project.id}')
+        db.close()
+        
+        return redirect('/my_projects')
+    return render_template('create_project.html', form=form)
 
 
 @app.route('/edit_age_sex/<int:user_id>', methods=['GET', 'POST'])
