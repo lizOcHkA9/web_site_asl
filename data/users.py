@@ -25,7 +25,7 @@ class User(SqlAlchemyBase, UserMixin):
     created_date = sa.Column(sa.DateTime, default=datetime.datetime.now)
 
     # TODO: дописать сюда связь с Project
-    # project_id = sa.Column(sa.Integer, sa.ForeignKey('project.id'))
+    projects_ids = sa.Column(sa.String, default='')
 
     def __repr__(self) -> str:
         return f'<{self.id}> {self.name} {self.email}'
