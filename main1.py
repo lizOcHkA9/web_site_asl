@@ -14,6 +14,7 @@ from data.users import User
 from loguru import logger
 import markdown
 import json
+from sqlalchemy.sql import text
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandex_123'
@@ -200,6 +201,28 @@ def edit_about_resume(user_id):
     elif request.method == 'GET':  # Заполняем форму текущими данными пользователя
         form.about.data = user_info.about
     return render_template('edit_about_resume.html', form=form, upload_dir=app.config['UPLOAD_FOLDER'])
+
+
+@app.route('/search', methods=['GET', 'POST'])
+def parse_and_show_index():
+    if request.method == 'POST':
+        txt = request.form
+        print(txt)
+        if txt == "":
+            return redirect('/index')
+        db_sess = db_session.create_session()
+        first_5_users = db_sess.execute(text("SELECT * FROM users WHERE name = :name"), params={"name": txt}).fetchall()[:5]
+        itog_first_5_users = []
+        for el in first_5_users:
+            el.about = markdown.markdown(el.about)
+            itog_first_5_users.append(el)
+        params = {
+            'title': 'Portfolio',
+            'users': itog_first_5_users,
+            'current_user': current_user,
+        }
+    if request.method == "GET":
+        return render_template('index.html', **params)
 
 
 @app.route('/download_file/<filename>')

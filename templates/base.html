@@ -14,9 +14,9 @@
     <div class="container-fluid">
     <nav class="navbar navbar-light bg-light justify-content-between">
         <a class="navbar-brand" href="/"><i><b>Portfolio</b></i></a>
-        <form class="d-flex" role="search">
-            <input class="form-control me-2" type="search" placeholder="Название проекта/автора/..." aria-label="Search">
-            <button class="btn btn-outline-success" type="submit">Поиск</button>
+        <form class="d-flex" role="search" method="post">
+            <input class="form-control me-2" type="search" placeholder="Имя автора" aria-label="Search" name="srch">
+            <a class="btn btn-outline-success" type="submit" href="/search">Поиск</a>
         </form>
         <p>
             {% if current_user.is_authenticated %}
