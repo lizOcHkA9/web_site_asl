@@ -1,3 +1,4 @@
+import math
 import os
 from flask import Flask, render_template, request, make_response, session, redirect, send_from_directory, flash, jsonify, current_app
 from werkzeug.utils import secure_filename
@@ -103,8 +104,10 @@ def profession(user_id):
 
 @app.route('/')
 def index():
+    page = request.args.get('page', 1, type=int)
+    per_page = 5  # Установим количество элементов на странице
     db_sess = db_session.create_session()
-    first_5_users = db_sess.query(User).all()[:5]
+    first_5_users = db_sess.query(User).all()[(page - 1) * per_page:per_page * page]
     itog_first_5_users = []
     for el in first_5_users:
         el.about = markdown.markdown(el.about)
@@ -113,7 +116,10 @@ def index():
         'title': 'Portfolio',
         'users': itog_first_5_users,
         'current_user': current_user,
+        'page': page,
+        'total_pages': math.ceil(len(db_sess.query(User).all()) / 5)
     }
+    db_sess.close()
     return render_template('index.html', **params)
 
 
