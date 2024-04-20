@@ -363,6 +363,8 @@ def parse_and_show_index():
             'title': 'Portfolio',
             'users': itog_first_5_users,
             'current_user': current_user,
+            'page': 1,
+            'total_pages': 1,
         }
         return render_template('index.html', **params)
     else:
