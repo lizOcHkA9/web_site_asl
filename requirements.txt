@@ -4,3 +4,4 @@ loguru
 Flask-SQLAlchemy
 flask_wtf
 sqlalchemy
+markdown
