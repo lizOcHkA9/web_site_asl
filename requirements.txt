@@ -1,0 +1,7 @@
+flask
+flask_login
+flask_forms
+loguru
+flask_sqlalchemy
+flask_wtf
+sqlalchemy
