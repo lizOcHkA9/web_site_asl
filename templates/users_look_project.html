@@ -1,0 +1,53 @@
+{% extends 'base.html' %} {% block content %}
+
+<div class="container mt-5">
+  <h1 class="mb-4">Лист проектов</h1>
+
+  {%if projects%} {% for project in projects %}
+  <div class="card mb-3">
+    <div class="row no-gutters">
+      <div class="col-md-4">
+        {% if project.main_pic %}
+        <img
+          src="{{ url_for('uploaded_file', filename=project.main_pic) }}"
+          class="card-img"
+          alt="{{ project.name }}"
+          width=300 height=300
+          ~
+        />
+        {% endif %}
+      </div>
+      <div class="col-md-8">
+        <div class="card-body">
+          <h5 class="card-title">{{ project.name }}</h5>
+          <p class="card-text">{{ project.desc }}</p>
+          <p class="card-text">
+            <small class="text-muted">Задачи проекта: {{ project.tasks }}</small>
+          </p>
+          {% if project.project_features %}
+          <p class="card-text">
+            <strong>{{ project.project_features }}</strong>
+          </p>
+          {% endif %}
+          <!-- Iterate over pics if any -->
+          {% if project.pics %}
+          <div>
+            <h6>Картинки проекта:</h6>
+            {% for pic in project.pics.split(';') %}
+            <img src="{{ url_for('uploaded_file', filename=pic) }}" class="img-thumbnail" alt="Project Image" width=300 height=300 />
+            {% endfor %}
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{%else%}
+<h5>Еще нет никаких проектов...</h5>
+{%endif%}
+
+
+<br><br><br>
+{%endblock%}

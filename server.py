@@ -143,6 +143,50 @@ def portfolio():
     }
     return render_template('portfolio.html', **params)
 
+@app.route('/users/<int:userid>')
+def get_user(userid: int):
+    db = db_session.create_session()
+    user_data = db.query(User).get(userid)
+    try:
+        exp_arr = json.loads(user_data.work_exp)
+    except Exception as e:
+        exp_arr = []
+        logger.warning(f'Cannot find any info about work_exp')
+    
+    project_cnt = len(db.query(Project).filter_by(author=userid).all())
+    logger.debug(f'Project cnt -> {project_cnt}')
+    params = {
+        'user': user_data,
+        'about': markdown.markdown(user_data.about),
+        'exp_arr': exp_arr,
+        'project_count': project_cnt
+    }
+    return render_template('users_look.html', **params)
+
+@app.route('/projects/user/<int:userid>')
+def get_users_projects(userid: int):
+    db = db_session.create_session()
+    user_data = db.query(User).get(userid)
+    projs = db.query(Project).filter_by(author=userid).all()
+    logger.debug(f'All the projs of the user -> {projs}')
+    
+    data = []
+    if projs:
+        for el in projs:
+            if el == '':
+                continue
+            proj = db.query(Project).get(int(el.id))
+            data.append(proj)
+    
+    # pictures = [for el in data]
+    
+    params = {
+        'projects': data,
+        'user': user_data,
+        'upload_dir': app.config['UPLOAD_FOLDER']
+    }
+    logger.debug(f'Path to uploaded files -> {params["upload_dir"]}')
+    return render_template('users_look_project.html', **params)
 
 @app.route('/my_projects')
 @login_required
