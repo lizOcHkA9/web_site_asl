@@ -1,7 +1,6 @@
 flask
 flask_login
-flask_forms
 loguru
-flask_sqlalchemy
+Flask-SQLAlchemy
 flask_wtf
 sqlalchemy
